@@ -1,9 +1,15 @@
 import json
 import urllib
+from typing import List
 from urllib import request
 
-import logger
+import logging
+
 from own_adapter.board import Board
+
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 class Agent(object):
@@ -11,13 +17,13 @@ class Agent(object):
         self.__platform_access = platform_access
 
     def get_platform_access(self):
-        return self.__platform_access;
+        return self.__platform_access
 
-    def get_boards(self):
+    def get_boards(self) -> List[Board]:
         boards = []
         http_method = 'GET'
         detail = 'discoveryResponse'
-        url = self.__platform_access.get_platform_url() + '/v1'
+        url = self.__platform_access.get_platform_url()
         values = {}
         try:
             headers = self.__platform_access.get_headers(http_method, url, values, detail)
@@ -27,7 +33,7 @@ class Agent(object):
             response_dict = json.loads(response_body)
             boards = self.__create_boards(response_dict)
         except Exception as e:
-            logger.exception('own_adapter', 'Could not get boards list. Exception message: {}'.format(str(e)))
+            logger.exception('Could not get boards list. Exception message: {}'.format(str(e)))
 
         return boards
 

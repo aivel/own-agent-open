@@ -3,8 +3,13 @@ import re
 import urllib
 from urllib import request, error
 
-import logger
+import logging
+
 from own_adapter.element import Element
+
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 class Board:
@@ -97,6 +102,22 @@ class Board:
         response_status = response.getcode()
 
         return response_status
+
+    def get_board_users(self):
+        """Puts a message to the board chat"""
+        http_method = 'GET'
+        url = self.__url + '/users'
+        detail = 'post'
+
+        payload = """"""
+
+        values = {}
+        headers = self.__platform_access.get_headers(http_method, url, values, detail, payload=payload)
+        get_board_users_request = request.Request(url, headers=headers, data=payload.encode())
+        get_board_users_request.get_method = lambda: http_method
+        response = request.urlopen(get_board_users_request)
+
+        return json.loads(response.read().decode())['users']
 
     def __get_board_size(self):
         """Returns board size"""

@@ -3,10 +3,14 @@ import urllib
 from datetime import datetime
 from urllib import request, error
 
+import logging
 import requests
 
-import logger
 from own_adapter.file import File
+
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 class Element:

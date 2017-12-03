@@ -4,16 +4,24 @@ import threading
 import time
 import traceback
 
+import logging
 import websocket
 
-import logger
 from own_adapter.agent import Agent
 from own_adapter.board import Board
 from own_adapter.element import Element
 from own_adapter.platform_access import PlatformAccess
 
-AGENT_LOGIN = ''
-AGENT_PASSWORD = ''
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+
+from config import SETTINGS as S
+
+
+AGENT_LOGIN = S['own_space']['login']
+AGENT_PASSWORD = S['own_space']['password']
 
 
 def __do_something(element):
@@ -47,7 +55,7 @@ def __run_on_board(board):
 
 def periodical_update():
     """Does periodical work with a predefined time interval"""
-    time_interval = 86400
+    time_interval = 3
 
     while True:
         time.sleep(time_interval)
@@ -56,7 +64,7 @@ def periodical_update():
         boards = agent.get_boards()
         for board in boards:
             __run_on_board(board)
-        logger.info('helloworld', 'Daily news update is done.')
+        logger.info('Daily news update is done.')
 
 
 def get_agent():
@@ -94,17 +102,17 @@ def on_websocket_message(ws, message):
 
 def on_websocket_error(ws, error):
     """Logs websocket errors"""
-    logger.error('helloworld', error)
+    logger.error(error)
 
 
 def on_websocket_open(ws):
     """Logs websocket openings"""
-    logger.info('helloworld', 'Websocket is open')
+    logger.info('Websocket is open')
 
 
 def on_websocket_close(ws):
     """Logs websocket closings"""
-    logger.info('helloworld', 'Websocket is closed')
+    logger.info('Websocket is closed')
 
 
 def open_websocket():

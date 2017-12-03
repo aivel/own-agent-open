@@ -5,7 +5,12 @@ import sys
 import urllib
 from urllib import request
 
-import logger
+import logging
+
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 
 OWN_PLATFORM_ADDRESS = 'http://188.130.155.101:9000'
 
@@ -58,7 +63,7 @@ class PlatformAccess:
         try:
             response_body = request.urlopen(token_request).read().decode()
         except Exception as e:
-            logger.exception('own_adapter', 'Authorization failed.\nurl = {}\nheaders = {}\nException message: {}'.format(address + url, headers, str(e)))
+            logger.exception('Authorization failed.\nurl = {}\nheaders = {}\nException message: {}'.format(address + url, headers, str(e)))
             sys.exit(1)
         else:
             dictionary = json.loads(response_body)
